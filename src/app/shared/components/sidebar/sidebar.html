@@ -1,0 +1,85 @@
+<!-- <aside
+      class="hidden min-h-screen w-64 shrink-0 border-r border-slate-200 bg-white lg:flex lg:flex-col"
+    > -->
+
+<!-- Mobile overlay -->
+@if (open()) {
+  <div
+    class="fixed inset-0 z-40 bg-slate-900/40 lg:hidden"
+    (click)="closeSidebar()"
+  ></div>
+}
+
+<!-- Sidebar -->
+<aside
+  class="
+    min-h-screen
+    fixed inset-y-0 left-0 z-50
+    flex w-64 flex-col
+    border-r border-slate-200 bg-white
+    transition-transform duration-300
+    lg:static lg:z-auto lg:translate-x-0
+  "
+  [class.-translate-x-full]="!open()"
+  [class.translate-x-0]="open()"
+>
+      <!-- Logo -->
+      <div class="border-b border-slate-200 px-6 py-3">
+        <h1 class="text-xl font-bold tracking-tight">
+          Personal Task Manager
+        </h1>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 px-4 py-6">
+        <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Menu
+        </p>
+
+        <div class="space-y-1">
+          <a
+            routerLink="/"
+            routerLinkActive="bg-slate-900 text-white"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center gap-3 rounded-lg bg-slate-900 px-3 py-2.5 text-sm font-medium text-white"
+            (click)="closeSidebar()"
+          >
+            <span>⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a
+            routerLink="/tasks"
+            routerLinkActive="bg-slate-900 text-white"
+            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            (click)="closeSidebar()"
+          >
+            <span>✓</span>
+            <span>Tasks</span>
+          </a>
+
+          <a
+            routerLink="/settings"
+            routerLinkActive="bg-slate-900 text-white"
+            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            (click)="closeSidebar()"
+          >
+            <span>⚙</span>
+            <span>Settings</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="border-t border-slate-200 p-4">
+        <div class="rounded-lg bg-slate-50 p-3">
+          <p class="text-xs font-medium text-slate-500">
+            Personal Workspace
+          </p>
+
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            My Tasks
+          </p>
+        </div>
+      </div>
+    </aside>
