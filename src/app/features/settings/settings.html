@@ -1,24 +1,393 @@
 <div class="h-screen overflow-hidden bg-slate-100">
-    
-    <div class="flex h-full min-h-0 w-full overflow-hidden">
-        
-        <!-- Sidebar -->
-        <app-sidebar 
-            [open]="sidebarOpen()"
-            (close)="closeSidebar()"
-        />
-        
-        <!-- Main -->
-        <main class="flex min-w-0 flex-1 flex-col overflow-hidden">
-            
-            <!-- Header -->
-            <app-header 
-                (menuClick)="toggleSidebar()"
-            />
 
-            <p>settings works!</p>
+  <div class="flex h-full min-h-0 w-full overflow-hidden">
 
-          </main>
+    <!-- Sidebar -->
+    <app-sidebar
+        [open]="sidebarOpen()"
+        (close)="closeSidebar()"
+     />
+
+    <!-- Main -->
+    <main class="flex min-w-0 flex-1 flex-col overflow-hidden">
+
+      <!-- Header -->
+      <app-header 
+        (menuClick)="toggleSidebar()"
+      />
+
+      <!-- Content -->
+      <section class="min-w-0 flex-1 overflow-y-auto">
+
+        <div class="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+
+          <!-- Page Header -->
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              Settings
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-500">
+              Manage your preferences and application settings.
+            </p>
+          </div>
+
+
+          <!-- Appearance -->
+          <section class="mt-8">
+
+            <div class="mb-3">
+              <h3 class="text-base font-semibold text-slate-900">
+                Appearance
+              </h3>
+
+              <p class="mt-1 text-sm text-slate-500">
+                Customize how Personal Task Manager looks.
+              </p>
+            </div>
+
+
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+              <!-- Theme -->
+              <div class="flex flex-col gap-4 border-b border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Theme
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Choose your preferred appearance.
+                  </p>
+                </div>
+
+                <select
+                  class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-slate-400"
+                >
+                  <option value="system">
+                    System
+                  </option>
+
+                  <option value="light">
+                    Light
+                  </option>
+
+                  <option value="dark">
+                    Dark
+                  </option>
+                </select>
+
+              </div>
+
+
+              <!-- Compact Mode -->
+              <div class="flex items-center justify-between p-5">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Compact mode
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Use a more compact task layout.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-6 w-11 rounded-full bg-slate-300 transition"
+                  aria-label="Toggle compact mode"
+                >
+                  <span
+                    class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm"
+                  ></span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- Task Preferences -->
+          <section class="mt-8">
+
+            <div class="mb-3">
+              <h3 class="text-base font-semibold text-slate-900">
+                Task Preferences
+              </h3>
+
+              <p class="mt-1 text-sm text-slate-500">
+                Configure default behavior when creating and managing tasks.
+              </p>
+            </div>
+
+
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+              <!-- Default Priority -->
+              <div class="flex flex-col gap-4 border-b border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Default priority
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Priority automatically selected for new tasks.
+                  </p>
+                </div>
+
+                <select
+                  class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-slate-400"
+                >
+                  <option value="low">
+                    Low
+                  </option>
+
+                  <option value="medium" selected>
+                    Medium
+                  </option>
+
+                  <option value="high">
+                    High
+                  </option>
+                </select>
+
+              </div>
+
+
+              <!-- Confirm Delete -->
+              <div class="flex items-center justify-between p-5">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Confirm before deleting
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Ask for confirmation before permanently deleting a task.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-6 w-11 rounded-full bg-slate-900 transition"
+                  aria-label="Toggle delete confirmation"
+                >
+                  <span
+                    class="absolute right-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm"
+                  ></span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- Notifications -->
+          <section class="mt-8">
+
+            <div class="mb-3">
+              <h3 class="text-base font-semibold text-slate-900">
+                Notifications
+              </h3>
+
+              <p class="mt-1 text-sm text-slate-500">
+                Choose which notifications you want to receive.
+              </p>
+            </div>
+
+
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+              <!-- Task Reminders -->
+              <div class="flex items-center justify-between border-b border-slate-200 p-5">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Task reminders
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Receive reminders for upcoming tasks.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-6 w-11 rounded-full bg-slate-900 transition"
+                  aria-label="Toggle task reminders"
+                >
+                  <span
+                    class="absolute right-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm"
+                  ></span>
+                </button>
+
+              </div>
+
+
+              <!-- Daily Summary -->
+              <div class="flex items-center justify-between p-5">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Daily summary
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Receive a daily summary of your tasks.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="relative h-6 w-11 rounded-full bg-slate-300 transition"
+                  aria-label="Toggle daily summary"
+                >
+                  <span
+                    class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm"
+                  ></span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- Data -->
+          <section class="mt-8">
+
+            <div class="mb-3">
+              <h3 class="text-base font-semibold text-slate-900">
+                Data
+              </h3>
+
+              <p class="mt-1 text-sm text-slate-500">
+                Manage your task data.
+              </p>
+            </div>
+
+
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+              <!-- Export -->
+              <div class="flex flex-col gap-4 border-b border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Export tasks
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Create a backup of your task data.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Export
+                </button>
+
+              </div>
+
+
+              <!-- Import -->
+              <div class="flex flex-col gap-4 border-b border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Import tasks
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Restore tasks from a backup file.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Import
+                </button>
+
+              </div>
+
+
+              <!-- Delete -->
+              <div class="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-red-600">
+                    Delete all tasks
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Permanently delete all your tasks. This action cannot be undone.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                >
+                  Delete all
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- About -->
+          <section class="mt-8 pb-8">
+
+            <div class="mb-3">
+              <h3 class="text-base font-semibold text-slate-900">
+                About
+              </h3>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+
+              <div class="flex items-center justify-between">
+
+                <div>
+                  <p class="text-sm font-medium text-slate-900">
+                    Personal Task Manager
+                  </p>
+
+                  <p class="mt-1 text-sm text-slate-500">
+                    Personal productivity and task management application.
+                  </p>
+                </div>
+
+                <span class="text-xs text-slate-400">
+                  v1.0.0
+                </span>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </section>
+
+    </main>
 
   </div>
 
