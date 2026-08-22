@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
 
@@ -8,4 +8,14 @@ import { Header } from '../../shared/components/header/header';
   styleUrl: './tasks.css',
   templateUrl: './tasks.html',
 })
-export class Tasks {}
+export class Tasks {
+  readonly sidebarOpen = signal(false)
+
+  toggleSidebar(): void{
+    this.sidebarOpen.update((open) => !open)
+  }
+
+  closeSidebar(): void{
+    this.sidebarOpen.set(false);
+  }
+}

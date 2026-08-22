@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,  signal } from '@angular/core';
 import { Header } from '../../shared/components/header/header';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
@@ -8,4 +8,13 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
   styleUrl: './settings.css',
   templateUrl: './settings.html',
 })
-export class Settings {}
+export class Settings {
+  readonly sidebarOpen = signal(false);
+  
+  toggleSidebar(): void{
+    this.sidebarOpen.update((open)=> !open);
+  }
+  closeSidebar(): void{
+    this.sidebarOpen.set(false);
+  }
+}

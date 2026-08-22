@@ -3,13 +3,18 @@
     <div class="flex h-full min-h-0 w-full overflow-hidden">
         
         <!-- Sidebar -->
-        <app-sidebar />
+        <app-sidebar 
+            [open]="sidebarOpen()"
+            (close)="closeSidebar()"
+        />
         
         <!-- Main -->
         <main class="flex min-w-0 flex-1 flex-col overflow-hidden">
             
             <!-- Header -->
-            <app-header />
+            <app-header 
+                (menuClick)="toggleSidebar()"
+            />
             
             <p>tasks works!</p>
 

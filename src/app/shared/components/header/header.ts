@@ -8,8 +8,8 @@ import { Component, output } from '@angular/core';
 })
 export class Header {
   readonly menuClick = output<void>();
+  
   openMenu(): void{
-    console.log('HEADER clicked');
     this.menuClick.emit();
   }
 }
