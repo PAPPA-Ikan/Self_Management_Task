@@ -37,6 +37,7 @@
             <button
               type="button"
               class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+              (click)="createTask()";
             >
               + New Task
             </button>
@@ -60,10 +61,12 @@
                 </label>
 
                 <input
-                  id="task-search"
-                  type="search"
-                  placeholder="Search tasks..."
-                  class="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white"
+                    id="task-search"
+                    type="search"
+                    placeholder="Search tasks..."
+                    [value]="searchQuery()"
+                    (input)="setSearchQuery($any($event.target).value)"
+                    class="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white"
                 />
 
               </div>
@@ -71,6 +74,8 @@
 
               <!-- Status -->
               <select
+                [value]="statusFilter()"
+                (change)="setStatusFilter($any($event.target).value)"
                 class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none focus:border-slate-400"
               >
                 <option value="all">
@@ -93,6 +98,8 @@
 
               <!-- Priority -->
               <select
+                [value]="priorityFilter()"
+                (change)="setPriorityFilter($any($event.target).value)"
                 class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none focus:border-slate-400"
               >
                 <option value="all">
@@ -112,6 +119,32 @@
                 </option>
               </select>
 
+              <select
+                [value]="categoryFilter()"
+                (change)="setCategoryFilter($any($event.target).value)"
+                class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none focus:border-slate-400"
+                >
+                <option value="all">
+                    All categories
+                </option>
+
+                <option value="personal">
+                    Personal
+                </option>
+
+                <option value="work">
+                    Work
+                </option>
+
+                <option value="learning">
+                    Learning
+                </option>
+
+                <option value="other">
+                    Other
+                </option>
+              </select>
+
             </div>
 
           </div>
@@ -121,18 +154,19 @@
           <div class="mt-6 flex items-center justify-between">
 
             <div>
-              <p class="text-sm font-medium text-slate-700">
-                12 Tasks
-              </p>
+            <p class="text-sm font-medium text-slate-700">
+                {{ filteredTasks().length }} Tasks
+            </p>
 
-              <p class="text-xs text-slate-400">
-                7 active · 5 completed
-              </p>
+            <p class="text-xs text-slate-400">
+                Showing {{ filteredTasks().length }} of {{ tasks().length }} tasks
+            </p>
             </div>
 
             <button
               type="button"
               class="text-sm font-medium text-slate-500 hover:text-slate-900"
+              (click)="clearFilters()"
             >
               Clear filters
             </button>
@@ -140,173 +174,155 @@
           </div>
 
 
-          <!-- Task List -->
           <div class="mt-4 space-y-3">
 
+            @for (task of filteredTasks(); track task.id) {
 
-            <!-- Task -->
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300">
-
-              <div class="flex items-start gap-4">
-
-                <!-- Checkbox -->
-                <button
-                  type="button"
-                  class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 border-slate-300 transition hover:border-slate-900"
-                  aria-label="Complete task"
-                ></button>
-
-
-                <!-- Content -->
-                <div class="min-w-0 flex-1">
-
-                  <div class="flex flex-wrap items-start justify-between gap-3">
-
-                    <div class="min-w-0">
-
-                      <h3 class="font-semibold text-slate-900">
-                        Learn Angular
-                      </h3>
-
-                      <p class="mt-1 text-sm text-slate-500">
-                        Learn Angular fundamentals and understand components,
-                        templates, signals, and routing.
-                      </p>
-
-                    </div>
-
-                    <span class="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600">
-                      HIGH
-                    </span>
-
-                  </div>
-
-
-                  <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-
-                    <span>
-                      Today
-                    </span>
-
-                    <span>
-                      In progress
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-
-            <!-- Task -->
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300">
-
-              <div class="flex items-start gap-4">
-
-                <button
-                  type="button"
-                  class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 border-slate-300 transition hover:border-slate-900"
-                  aria-label="Complete task"
-                ></button>
-
-                <div class="min-w-0 flex-1">
-
-                  <div class="flex flex-wrap items-start justify-between gap-3">
-
-                    <div class="min-w-0">
-
-                      <h3 class="font-semibold text-slate-900">
-                        Build Task Dashboard
-                      </h3>
-
-                      <p class="mt-1 text-sm text-slate-500">
-                        Create the dashboard interface for the personal task manager.
-                      </p>
-
-                    </div>
-
-                    <span class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-600">
-                      MEDIUM
-                    </span>
-
-                  </div>
-
-                  <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-
-                    <span>
-                      Tomorrow
-                    </span>
-
-                    <span>
-                      To do
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-
-            <!-- Completed Task -->
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-
-              <div class="flex items-start gap-4">
-
-                <button
-                  type="button"
-                  class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-900 bg-slate-900 text-xs text-white"
-                  aria-label="Completed task"
+                <article
+                class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300"
                 >
-                  ✓
+
+                <div class="flex items-start gap-4">
+
+                    <!-- Complete -->
+                    <button
+                    type="button"
+                    class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition"
+                    [class.border-slate-900]="task.status === 'done'"
+                    [class.bg-slate-900]="task.status === 'done'"
+                    [class.border-slate-300]="task.status !== 'done'"
+                    (click)="toggleTask(task)"
+                    >
+                    @if (task.status === 'done') {
+                        <span class="text-xs text-white">
+                        ✓
+                        </span>
+                    }
+                    </button>
+
+
+                    <!-- Task -->
+                    <div class="min-w-0 flex-1">
+
+                    <div class="flex flex-wrap items-start justify-between gap-3">
+
+                        <div class="min-w-0">
+
+                        <h3
+                            class="font-semibold"
+                            [class.text-slate-400]="task.status === 'done'"
+                            [class.line-through]="task.status === 'done'"
+                            [class.text-slate-900]="task.status !== 'done'"
+                        >
+                            {{ task.title }}
+                        </h3>
+
+                        <p class="mt-1 text-sm text-slate-500">
+                            {{ task.description }}
+                        </p>
+
+                        </div>
+
+
+                        <!-- Priority -->
+                        @switch (task.priority) {
+
+                        @case ('high') {
+                            <span class="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600">
+                            HIGH
+                            </span>
+                        }
+
+                        @case ('medium') {
+                            <span class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-600">
+                            MEDIUM
+                            </span>
+                        }
+
+                        @case ('low') {
+                            <span class="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600">
+                            LOW
+                            </span>
+                        }
+
+                        }
+
+                    </div>
+
+
+                    <!-- Metadata -->
+                    <div class="mt-4 flex flex-wrap items-center gap-3 text-xs">
+
+                        <span class="rounded-md bg-slate-100 px-2 py-1 text-slate-500">
+                        {{ task.category }}
+                        </span>
+
+                        <span class="text-slate-400">
+                        {{ task.status }}
+                        </span>
+
+                        @if (task.dueDate) {
+                        <span class="text-slate-400">
+                            Due {{ task.dueDate }}
+                        </span>
+                        }
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="mt-4 flex gap-2">
+
+                        <button
+                        type="button"
+                        class="text-xs font-medium text-slate-500 hover:text-slate-900"
+                        (click)="editTask(task)"
+                        >
+                        Edit
+                        </button>
+
+                        <button
+                        type="button"
+                        class="text-xs font-medium text-red-500 hover:text-red-700"
+                        (click)="deleteTask(task.id)"
+                        >
+                        Delete
+                        </button>
+
+                    </div>
+
+                    </div>
+
+                </div>
+
+                </article>
+
+            }
+
+            @if (filteredTasks().length === 0) {
+
+            <div class="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
+
+                <p class="font-medium text-slate-700">
+                No tasks found
+                </p>
+
+                <p class="mt-1 text-sm text-slate-400">
+                Try changing your search or filters.
+                </p>
+
+                <button
+                type="button"
+                class="mt-4 text-sm font-medium text-slate-700 hover:text-slate-950"
+                (click)="clearFilters()"
+                >
+                Clear filters
                 </button>
 
-                <div class="min-w-0 flex-1">
+            </div>
+            }
 
-                  <div class="flex flex-wrap items-start justify-between gap-3">
-
-                    <div class="min-w-0">
-
-                      <h3 class="font-semibold text-slate-400 line-through">
-                        Learn TypeScript
-                      </h3>
-
-                      <p class="mt-1 text-sm text-slate-400">
-                        Review TypeScript types, interfaces, generics, and utility types.
-                      </p>
-
-                    </div>
-
-                    <span class="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600">
-                      DONE
-                    </span>
-
-                  </div>
-
-                  <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-
-                    <span>
-                      Yesterday
-                    </span>
-
-                    <span>
-                      Completed
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-          </div>
+            </div>
 
         </div>
 
@@ -317,3 +333,13 @@
   </div>
 
 </div>
+
+@if (showForm()) {
+
+  <app-task-form
+    [task]="editingTask()"
+    (save)="saveTask($event)"
+    (cancel)="closeForm()"
+  />
+
+}

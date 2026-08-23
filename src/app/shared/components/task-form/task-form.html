@@ -1,0 +1,233 @@
+<div class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/40 p-4">
+
+  <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">
+          {{ task() ? 'Edit Task' : 'New Task' }}
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          {{ task() ? 'Update your task.' : 'Create a new task.' }}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        (click)="close()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <!-- Form -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="space-y-5 p-6"
+    >
+
+      <!-- Title -->
+      <div>
+
+        <label
+          for="title"
+          class="block text-sm font-medium text-slate-700"
+        >
+          Title
+        </label>
+
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Learn Angular"
+          class="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+        >
+
+        @if (
+          form.controls.title.invalid &&
+          form.controls.title.touched
+        ) {
+          <p class="mt-1 text-xs text-red-500">
+            Title must contain at least 3 characters.
+          </p>
+        }
+
+      </div>
+
+
+      <!-- Description -->
+      <div>
+
+        <label
+          for="description"
+          class="block text-sm font-medium text-slate-700"
+        >
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          rows="3"
+          formControlName="description"
+          placeholder="Describe this task..."
+          class="mt-2 w-full resize-none rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+        ></textarea>
+
+      </div>
+
+
+      <!-- Classification -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+        <!-- Status -->
+        <div>
+
+          <label
+            for="status"
+            class="block text-sm font-medium text-slate-700"
+          >
+            Status
+          </label>
+
+          <select
+            id="status"
+            formControlName="status"
+            class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+          >
+            <option value="todo">
+              To do
+            </option>
+
+            <option value="in-progress">
+              In progress
+            </option>
+
+            <option value="done">
+              Done
+            </option>
+          </select>
+
+        </div>
+
+
+        <!-- Priority -->
+        <div>
+
+          <label
+            for="priority"
+            class="block text-sm font-medium text-slate-700"
+          >
+            Priority
+          </label>
+
+          <select
+            id="priority"
+            formControlName="priority"
+            class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+          >
+            <option value="low">
+              Low
+            </option>
+
+            <option value="medium">
+              Medium
+            </option>
+
+            <option value="high">
+              High
+            </option>
+          </select>
+
+        </div>
+
+
+        <!-- Category -->
+        <div>
+
+          <label
+            for="category"
+            class="block text-sm font-medium text-slate-700"
+          >
+            Category
+          </label>
+
+          <select
+            id="category"
+            formControlName="category"
+            class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+          >
+            <option value="personal">
+              Personal
+            </option>
+
+            <option value="work">
+              Work
+            </option>
+
+            <option value="learning">
+              Learning
+            </option>
+
+            <option value="other">
+              Other
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- Due Date -->
+      <div>
+
+        <label
+          for="dueDate"
+          class="block text-sm font-medium text-slate-700"
+        >
+          Due date
+        </label>
+
+        <input
+          id="dueDate"
+          type="date"
+          formControlName="dueDate"
+          class="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-slate-400"
+        >
+
+      </div>
+
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 border-t border-slate-200 pt-5">
+
+        <button
+          type="button"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          {{ task() ? 'Save changes' : 'Create task' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
