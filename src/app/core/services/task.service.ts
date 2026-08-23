@@ -7,40 +7,7 @@ import { Task } from '../models/task';
 })
 export class TaskService {
 
-  readonly tasks = signal<Task[]>([
-    {
-      id: crypto.randomUUID(),
-      title: 'Learn Angular',
-      description: 'Learn Angular fundamentals.',
-      status: 'in-progress',
-      priority: 'high',
-      category: 'learning',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-
-    {
-      id: crypto.randomUUID(),
-      title: 'Build Task Dashboard',
-      description: 'Create the task management dashboard.',
-      status: 'todo',
-      priority: 'medium',
-      category: 'work',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-
-    {
-      id: crypto.randomUUID(),
-      title: 'Learn TypeScript',
-      description: 'Review TypeScript fundamentals.',
-      status: 'done',
-      priority: 'low',
-      category: 'learning',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-  ]);
+  readonly tasks = signal<Task[]>([]);
 
 
   addTask(task: Task): void {
