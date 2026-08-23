@@ -1,5 +1,7 @@
-import { Component, signal, input, output } from '@angular/core';
+import { Component, signal, input, output, inject } from '@angular/core';
+import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
@@ -11,6 +13,9 @@ export class Sidebar {
   // readonly isOpen = signal(false);
   readonly open = input(false);
   readonly close = output<void>();
+
+  readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   // Open(): void{
   //   this.isOpen.set(true);
@@ -26,4 +31,8 @@ export class Sidebar {
     this.close.emit();
   }
 
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    await this.router.navigate(['/login']);
+  }
 }

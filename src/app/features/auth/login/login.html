@@ -1,0 +1,122 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+
+  <div class="w-full max-w-md">
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+      <div class="text-center">
+
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+          Personal Task Manager
+        </h1>
+
+        <p class="mt-2 text-sm text-slate-500">
+          Sign in to your account
+        </p>
+
+      </div>
+
+
+      @if (errorMessage()) {
+
+        <div
+          class="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
+        >
+          {{ errorMessage() }}
+        </div>
+
+      }
+
+
+      <form
+        class="mt-6 space-y-5"
+        (ngSubmit)="submit()"
+      >
+
+        <!-- Email -->
+
+        <div>
+
+          <label
+            for="email"
+            class="block text-sm font-medium text-slate-700"
+          >
+            Email
+          </label>
+
+          <input
+            id="email"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            required
+            autocomplete="email"
+            class="mt-2 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            placeholder="you@example.com"
+          />
+
+        </div>
+
+
+        <!-- Password -->
+
+        <div>
+
+          <label
+            for="password"
+            class="block text-sm font-medium text-slate-700"
+          >
+            Password
+          </label>
+
+          <input
+            id="password"
+            name="password"
+            type="password"
+            [(ngModel)]="password"
+            required
+            autocomplete="current-password"
+            class="mt-2 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+            placeholder="••••••••"
+          />
+
+        </div>
+
+
+        <!-- Submit -->
+
+        <button
+          type="submit"
+          [disabled]="authService.loading()"
+          class="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+
+          @if (authService.loading()) {
+            Signing in...
+          } @else {
+            Sign in
+          }
+
+        </button>
+
+      </form>
+
+
+      <p class="mt-6 text-center text-sm text-slate-500">
+
+        Don't have an account?
+
+        <a
+          routerLink="/register"
+          class="font-medium text-slate-900 hover:underline"
+        >
+          Create account
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
