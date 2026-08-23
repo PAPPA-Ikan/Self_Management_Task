@@ -31,19 +31,19 @@
 
           <app-stat-card
             title="Total"
-            value="12"
+            [value]="totalTasks()"
             description="All tasks"
           />
 
           <app-stat-card
             title="Active"
-            value="7"
+            [value]="activeTasks()"
             description="Tasks in progress"
           />
 
           <app-stat-card
             title="Done"
-            value="5"
+            [value]="completedTasks()"
             description="Completed tasks"
           />
 
@@ -75,126 +75,131 @@
 
           <!-- Temporary Task -->
           <div class="mt-4 space-y-3">
+            @for (task of todayTasks(); track task.id) {
+              <article
+                class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div class="flex items-start gap-4">
 
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <!-- Complete -->
+                  <button
+                    type="button"
+                    class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition"
+                    [class.border-slate-900]="task.status === 'done'"
+                    [class.bg-slate-900]="task.status === 'done'"
+                    [class.border-slate-300]="task.status !== 'done'"
+                    (click)="toggleTask(task)"
+                    aria-label="Complete task"
+                  >
+                    @if (task.status === 'done') {
+                      <span class="text-xs text-white">
+                        ✓
+                      </span>
+                    }
+                  </button>
 
-              <div class="flex items-start gap-4">
 
-                <button
-                  type="button"
-                  class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 border-slate-300 hover:border-slate-900"
-                  aria-label="Complete task"
-                ></button>
+                  <!-- Content -->
+                  <div class="min-w-0 flex-1">
 
-                <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-start justify-between gap-3">
 
-                  <div class="flex flex-wrap items-center justify-between gap-2">
+                      <div class="min-w-0">
 
-                    <h4 class="font-semibold text-slate-900">
-                      Learn Angular
-                    </h4>
+                        <h4
+                          class="font-semibold"
+                          [class.text-slate-400]="task.status === 'done'"
+                          [class.line-through]="task.status === 'done'"
+                          [class.text-slate-900]="task.status !== 'done'"
+                        >
+                          {{ task.title }}
+                        </h4>
 
-                    <span class="rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600">
-                      HIGH
-                    </span>
+                        <p class="mt-1 text-sm text-slate-500">
+                          {{ task.description }}
+                        </p>
 
-                  </div>
+                      </div>
 
-                  <p class="mt-1 text-sm text-slate-500">
-                    Learn the fundamentals of Angular and build the task management application.
-                  </p>
 
-                  <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
-                    <span>Today</span>
-                    <span>In progress</span>
+                      <!-- Priority -->
+                      @switch (task.priority) {
+
+                        @case ('high') {
+
+                          <span
+                            class="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600"
+                          >
+                            HIGH
+                          </span>
+
+                        }
+
+                        @case ('medium') {
+
+                          <span
+                            class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-600"
+                          >
+                            MEDIUM
+                          </span>
+
+                        }
+
+                        @case ('low') {
+
+                          <span
+                            class="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600"
+                          >
+                            LOW
+                          </span>
+
+                        }
+
+                      }
+
+                    </div>
+
+
+                    <!-- Metadata -->
+                    <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
+
+                      <span>
+                        {{ task.category }}
+                      </span>
+
+                      <span>
+                        {{ task.status }}
+                      </span>
+
+                    </div>
+
                   </div>
 
                 </div>
 
-              </div>
+              </article>
 
-            </article>
+            }
 
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
 
-              <div class="flex items-start gap-4">
+            @if (todayTasks().length === 0) {
 
-                <button
-                  type="button"
-                  class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 border-slate-300 hover:border-slate-900"
-                  aria-label="Complete task"
-                ></button>
+              <div
+                class="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center"
+              >
 
-                <div class="min-w-0 flex-1">
+                <p class="font-medium text-slate-700">
+                  No active tasks
+                </p>
 
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-
-                    <h4 class="font-semibold text-slate-900">
-                      Learn Angular
-                    </h4>
-
-                    <span class="rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600">
-                      HIGH
-                    </span>
-
-                  </div>
-
-                  <p class="mt-1 text-sm text-slate-500">
-                    Learn the fundamentals of Angular and build the task management application.
-                  </p>
-
-                  <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
-                    <span>Today</span>
-                    <span>In progress</span>
-                  </div>
-
-                </div>
+                <p class="mt-1 text-sm text-slate-400">
+                  You're all caught up.
+                </p>
 
               </div>
 
-            </article>
-
-            <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-
-              <div class="flex items-start gap-4">
-
-                <button
-                  type="button"
-                  class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 border-slate-300 hover:border-slate-900"
-                  aria-label="Complete task"
-                ></button>
-
-                <div class="min-w-0 flex-1">
-
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-
-                    <h4 class="font-semibold text-slate-900">
-                      Learn Angular
-                    </h4>
-
-                    <span class="rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600">
-                      HIGH
-                    </span>
-
-                  </div>
-
-                  <p class="mt-1 text-sm text-slate-500">
-                    Learn the fundamentals of Angular and build the task management application.
-                  </p>
-
-                  <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
-                    <span>Today</span>
-                    <span>In progress</span>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
+            }
 
           </div>
-
         </section>
         </div>
       </section>

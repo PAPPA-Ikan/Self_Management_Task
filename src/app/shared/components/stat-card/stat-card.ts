@@ -1,13 +1,17 @@
-import { Component, input } from '@angular/core';
+import {
+  Component,
+  input,
+} from '@angular/core';
 
 @Component({
-  imports: [],
   selector: 'app-stat-card',
-  styleUrl: './stat-card.css',
+  imports: [],
   templateUrl: './stat-card.html',
+  styleUrl: './stat-card.css',
 })
 export class StatCard {
   readonly title = input.required<string>();
-  readonly value = input.required<string>();
+  readonly value = input.required<number>();
   readonly description = input.required<string>();
+
 }

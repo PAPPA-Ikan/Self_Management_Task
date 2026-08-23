@@ -1,6 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { TaskForm } from '../../shared/components/task-form/task-form';
 import { Task, TaskCategory, TaskPriority, TaskStatus } from '../../core/models/task';
+import { TaskService } from '../../core/services/task.service';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
 
@@ -11,60 +12,27 @@ import { Header } from '../../shared/components/header/header';
   styleUrl: './tasks.css',
 })
 export class Tasks {
-  readonly sidebarOpen = signal(false)
+  
+  private readonly taskService  = inject(TaskService)
+  readonly tasks = this.taskService.tasks;
 
+  readonly sidebarOpen = signal(false)
+  
   toggleSidebar(): void{
     this.sidebarOpen.update((open) => !open)
   }
   closeSidebar(): void{
     this.sidebarOpen.set(false);
   }
-
-  readonly tasks = signal<Task[]>([
-    {
-      id: crypto.randomUUID(),
-      title: 'Learn Angular',
-      description: 'Learn Angular fundamentals.',
-      status: 'in-progress',
-      priority: 'high',
-      category: 'learning',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-
-    {
-      id: crypto.randomUUID(),
-      title: 'Build Task Dashboard',
-      description: 'Create the task management dashboard.',
-      status: 'todo',
-      priority: 'medium',
-      category: 'work',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-
-    {
-      id: crypto.randomUUID(),
-      title: 'Learn TypeScript',
-      description: 'Review TypeScript fundamentals.',
-      status: 'done',
-      priority: 'low',
-      category: 'learning',
-      dueDate: null,
-      createdAt: new Date().toISOString(),
-    },
-  ]);
-
+  
+  
   // =========================
   // Filter State
   // =========================
-
+  
   readonly searchQuery = signal('');
-
   readonly statusFilter = signal<'all' | TaskStatus>('all');
-
   readonly priorityFilter = signal<'all' | TaskPriority>('all');
-
   readonly categoryFilter = signal<'all' | TaskCategory>('all');
 
   // =========================
@@ -202,62 +170,31 @@ export class Tasks {
 
     if (editing) {
 
-      this.tasks.update(tasks =>
-        tasks.map(task =>
-          task.id === editing.id
-            ? {
-                ...task,
-                ...data,
-              }
-            : task
-        )
-      );
+      this.taskService.updateTask({
+        ...editing,
+        ...data,
+      });
 
     } else {
 
-      const newTask: Task = {
+      this.taskService.addTask({
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
         ...data,
-      };
+      });
 
-      this.tasks.update(tasks => [
-        newTask,
-        ...tasks,
-      ]);
     }
 
     this.closeForm();
   }
 
-
   deleteTask(id: string): void {
-
-    this.tasks.update(tasks =>
-      tasks.filter(task => task.id !== id)
-    );
-
+    this.taskService.deleteTask(id);
   }
 
 
   toggleTask(task: Task): void {
-
-    const status =
-      task.status === 'done'
-        ? 'todo'
-        : 'done';
-
-    this.tasks.update(tasks =>
-      tasks.map(item =>
-        item.id === task.id
-          ? {
-              ...item,
-              status,
-            }
-          : item
-      )
-    );
-
+    this.taskService.toggleTask(task);
   }
 
 
