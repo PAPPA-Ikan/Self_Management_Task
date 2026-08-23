@@ -7,9 +7,8 @@
 /bazel-out
 
 # Environment files
-/src/environments/environment.ts
-/src/environments/environment.development.ts
-/src/environments/environment.production.ts
+/src/environment/environment.ts
+/src/environment/environment.production.ts
 
 # Node
 /node_modules
