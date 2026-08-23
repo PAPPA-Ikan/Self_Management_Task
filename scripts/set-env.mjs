@@ -1,20 +1,17 @@
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabasePublishableKey =
-  process.env.SUPABASE_PUBLISHABLE_KEY;
+const supabasePublishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
 
 if (!supabaseUrl) {
   throw new Error('SUPABASE_URL is not defined');
 }
 
 if (!supabasePublishableKey) {
-  throw new Error(
-    'SUPABASE_PUBLISHABLE_KEY is not defined'
-  );
+  throw new Error('SUPABASE_PUBLISHABLE_KEY is not defined');
 }
 
-mkdirSync('src/environment', {
+mkdirSync('src/environments', {
   recursive: true,
 });
 
@@ -26,10 +23,8 @@ const content = `export const environment = {
 `;
 
 writeFileSync(
-  'src/environment/environment.production.ts',
+  'src/environments/environment.ts',
   content,
 );
 
-console.log(
-  'Production environment file generated successfully.',
-);
+console.log('Angular environment generated successfully.');
