@@ -19,7 +19,7 @@ mkdirSync('src/environments', {
 });
 
 writeFileSync(
-  'src/environments/environment.ts',
+  'src/environment/environment.ts',
   `export const environment = {
   production: true,
   supabaseUrl: ${JSON.stringify(supabaseUrl)},
