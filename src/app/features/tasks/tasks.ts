@@ -2,7 +2,7 @@ import {
   Component,
   signal,
   computed,
-  inject,
+  inject, OnInit
 } from '@angular/core';
 
 import {
@@ -14,10 +14,7 @@ import {
 
 import { TaskService } from '../../core/services/task.service';
 
-import {
-  TaskForm,
-  TaskFormValue,
-} from '../../shared/components/task-form/task-form';
+import { TaskForm, TaskFormValue, } from '../../shared/components/task-form/task-form';
 
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
@@ -32,18 +29,10 @@ import { Header } from '../../shared/components/header/header';
   templateUrl: './tasks.html',
   styleUrl: './tasks.css',
 })
-export class Tasks {
+export class Tasks implements OnInit{
 
   private readonly taskService = inject(TaskService);
-
-  /**
-   * Semua task dari TaskService
-   */
   readonly tasks = this.taskService.tasks;
-
-  /**
-   * Sidebar
-   */
   readonly sidebarOpen = signal(false);
 
   toggleSidebar(): void {
@@ -54,6 +43,17 @@ export class Tasks {
 
   closeSidebar(): void {
     this.sidebarOpen.set(false);
+  }
+
+  ngOnInit(): void {
+    this.taskService.loadTasks().subscribe({
+      next: () => {
+        console.log('Tasks loaded:', this.tasks());
+      },
+      error: (error) => {
+        console.error('Failed to load tasks:', error);
+      },
+    });
   }
 
   /**
