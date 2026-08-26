@@ -1,22 +1,15 @@
-import {
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Task, TaskCategory, TaskPriority, TaskStatus } from '../../../core/models/task';
 
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-
-import {
-  Task,
-  TaskCategory,
-  TaskPriority,
-  TaskStatus,
-} from '../../../core/models/task';
+export interface TaskFormValue {
+  title: string;
+  description: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  category: TaskCategory;
+  due_date: string | null;
+}
 
 type TaskFormControls = {
   title: FormControl<string>;
@@ -24,7 +17,7 @@ type TaskFormControls = {
   status: FormControl<TaskStatus>;
   priority: FormControl<TaskPriority>;
   category: FormControl<TaskCategory>;
-  dueDate: FormControl<string>;
+  due_date: FormControl<string>;
 };
 
 @Component({
@@ -37,7 +30,7 @@ export class TaskForm {
 
   readonly task = input<Task | null>(null);
 
-  readonly save = output<Omit<Task, 'id' | 'createdAt'>>();
+  readonly save =  output<TaskFormValue>();
 
   readonly cancel = output<void>();
 
@@ -66,7 +59,7 @@ export class TaskForm {
       nonNullable: true,
     }),
 
-    dueDate: new FormControl('', {
+    due_date: new FormControl('', {
       nonNullable: true,
     }),
   });
@@ -84,7 +77,7 @@ export class TaskForm {
       status: task.status,
       priority: task.priority,
       category: task.category,
-      dueDate: task.dueDate ?? '',
+      due_date: task.due_date ?? '',
     });
   }
 
@@ -100,7 +93,7 @@ export class TaskForm {
       status: this.form.controls.status.value,
       priority: this.form.controls.priority.value,
       category: this.form.controls.category.value,
-      dueDate: this.form.controls.dueDate.value || null,
+      due_date: this.form.controls.due_date.value || null,
     });
   }
 

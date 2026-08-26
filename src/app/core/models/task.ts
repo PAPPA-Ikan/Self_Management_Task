@@ -16,11 +16,13 @@ export type TaskCategory =
 
 export interface Task{
     id: string;
+    user_id: string;
     title: string;
     description: string;
     status: TaskStatus;
     priority: TaskPriority;
     category: TaskCategory;
-    dueDate: string | null;
+    due_date: string | null;
     createdAt: string;
+    updated_at: string;
 }

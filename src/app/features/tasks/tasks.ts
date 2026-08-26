@@ -1,83 +1,122 @@
-import { Component, signal, computed, inject } from '@angular/core';
-import { TaskForm } from '../../shared/components/task-form/task-form';
-import { Task, TaskCategory, TaskPriority, TaskStatus } from '../../core/models/task';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+} from '@angular/core';
+
+import {
+  Task,
+  TaskCategory,
+  TaskPriority,
+  TaskStatus,
+} from '../../core/models/task';
+
 import { TaskService } from '../../core/services/task.service';
+
+import {
+  TaskForm,
+  TaskFormValue,
+} from '../../shared/components/task-form/task-form';
+
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
 
 @Component({
   selector: 'app-tasks',
-  imports: [TaskForm, Header, Sidebar ],
+  imports: [
+    TaskForm,
+    Header,
+    Sidebar,
+  ],
   templateUrl: './tasks.html',
   styleUrl: './tasks.css',
 })
 export class Tasks {
-  
-  private readonly taskService  = inject(TaskService)
+
+  private readonly taskService = inject(TaskService);
+
+  /**
+   * Semua task dari TaskService
+   */
   readonly tasks = this.taskService.tasks;
 
-  readonly sidebarOpen = signal(false)
-  
-  toggleSidebar(): void{
-    this.sidebarOpen.update((open) => !open)
+  /**
+   * Sidebar
+   */
+  readonly sidebarOpen = signal(false);
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update(
+      (open) => !open,
+    );
   }
-  closeSidebar(): void{
+
+  closeSidebar(): void {
     this.sidebarOpen.set(false);
   }
-  
-  
-  // =========================
-  // Filter State
-  // =========================
-  
-  readonly searchQuery = signal('');
-  readonly statusFilter = signal<'all' | TaskStatus>('all');
-  readonly priorityFilter = signal<'all' | TaskPriority>('all');
-  readonly categoryFilter = signal<'all' | TaskCategory>('all');
 
-  // =========================
-  // Filtered Tasks
-  // =========================
+  /**
+   * =========================
+   * FILTER STATE
+   * =========================
+   */
+
+  readonly searchQuery = signal('');
+
+  readonly statusFilter =
+    signal<'all' | TaskStatus>('all');
+
+  readonly priorityFilter =
+    signal<'all' | TaskPriority>('all');
+
+  readonly categoryFilter =
+    signal<'all' | TaskCategory>('all');
+
+  /**
+   * =========================
+   * FILTERED TASKS
+   * =========================
+   */
 
   readonly filteredTasks = computed(() => {
 
-    const query = this.searchQuery()
-      .trim()
-      .toLowerCase();
+    const query =
+      this.searchQuery()
+        .trim()
+        .toLowerCase();
 
-    const status = this.statusFilter();
+    const status =
+      this.statusFilter();
 
-    const priority = this.priorityFilter();
+    const priority =
+      this.priorityFilter();
 
-    const category = this.categoryFilter();
+    const category =
+      this.categoryFilter();
 
+    return this.tasks().filter((task) => {
 
-    return this.tasks().filter(task => {
-
-      // Search
       const matchesSearch =
         query === '' ||
-        task.title.toLowerCase().includes(query) ||
-        task.description.toLowerCase().includes(query);
+        task.title
+          .toLowerCase()
+          .includes(query) ||
+        task.description
+          .toLowerCase()
+          .includes(query);
 
-
-      // Status
       const matchesStatus =
         status === 'all' ||
         task.status === status;
 
-
-      // Priority
       const matchesPriority =
         priority === 'all' ||
         task.priority === priority;
 
-
-      // Category
       const matchesCategory =
         category === 'all' ||
         task.category === category;
-
 
       return (
         matchesSearch &&
@@ -85,118 +124,201 @@ export class Tasks {
         matchesPriority &&
         matchesCategory
       );
-
     });
-
   });
 
-
-  // =========================
-  // Filter Actions
-  // =========================
+  /**
+   * =========================
+   * FILTER ACTIONS
+   * =========================
+   */
 
   setSearchQuery(value: string): void {
     this.searchQuery.set(value);
   }
 
-
-  setStatusFilter(
-    value: string
-  ): void {
-
+  setStatusFilter(value: string): void {
     this.statusFilter.set(
-      value as 'all' | TaskStatus
+      value as 'all' | TaskStatus,
     );
-
   }
 
-
-  setPriorityFilter(
-    value: string
-  ): void {
-
+  setPriorityFilter(value: string): void {
     this.priorityFilter.set(
-      value as 'all' | TaskPriority
+      value as 'all' | TaskPriority,
     );
-
   }
 
-
-  setCategoryFilter(
-    value: string
-  ): void {
-
+  setCategoryFilter(value: string): void {
     this.categoryFilter.set(
-      value as 'all' | TaskCategory
+      value as 'all' | TaskCategory,
     );
-
   }
-
 
   clearFilters(): void {
-
     this.searchQuery.set('');
-
     this.statusFilter.set('all');
-
     this.priorityFilter.set('all');
-
     this.categoryFilter.set('all');
-
   }
+
+  /**
+   * =========================
+   * FORM STATE
+   * =========================
+   */
 
   readonly showForm = signal(false);
 
-  readonly editingTask = signal<Task | null>(null);
+  readonly editingTask =
+    signal<Task | null>(null);
 
+  /**
+   * =========================
+   * CREATE
+   * =========================
+   */
 
   createTask(): void {
     this.editingTask.set(null);
     this.showForm.set(true);
   }
 
+  /**
+   * =========================
+   * EDIT
+   * =========================
+   */
 
   editTask(task: Task): void {
     this.editingTask.set(task);
     this.showForm.set(true);
   }
 
+  /**
+   * =========================
+   * SAVE
+   * =========================
+   */
 
-  saveTask(
-    data: Omit<Task, 'id' | 'createdAt'>
-  ): void {
+  saveTask(data: TaskFormValue): void {
 
-    const editing = this.editingTask();
+    const editing =
+      this.editingTask();
 
+    /**
+     * EDIT EXISTING TASK
+     */
     if (editing) {
 
-      this.taskService.updateTask({
-        ...editing,
-        ...data,
-      });
+      this.taskService
+        .updateTask(
+          editing.id,
+          {
+            title: data.title,
+            description: data.description,
+            status: data.status,
+            priority: data.priority,
+            category: data.category,
+            due_date: data.due_date,
+          },
+        )
+        .subscribe({
+          next: () => {
+            this.closeForm();
+          },
 
-    } else {
+          error: (error) => {
+            console.error(
+              'Failed to update task:',
+              error,
+            );
+          },
+        });
 
-      this.taskService.addTask({
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        ...data,
-      });
-
+      return;
     }
 
-    this.closeForm();
+    /**
+     * CREATE NEW TASK
+     */
+    this.taskService
+      .createTask({
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        priority: data.priority,
+        category: data.category,
+        due_date: data.due_date,
+      })
+      .subscribe({
+        next: () => {
+          this.closeForm();
+        },
+
+        error: (error) => {
+          console.error(
+            'Failed to create task:',
+            error,
+          );
+        },
+      });
   }
+
+  /**
+   * =========================
+   * DELETE
+   * =========================
+   */
 
   deleteTask(id: string): void {
-    this.taskService.deleteTask(id);
+
+    const confirmed =
+      window.confirm(
+        'Are you sure you want to delete this task?',
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.taskService
+      .deleteTask(id)
+      .subscribe({
+        error: (error) => {
+          console.error(
+            'Failed to delete task:',
+            error,
+          );
+        },
+      });
   }
 
+  /**
+   * =========================
+   * TOGGLE COMPLETE
+   * =========================
+   */
 
   toggleTask(task: Task): void {
-    this.taskService.toggleTask(task);
+
+    this.taskService
+      .toggleTask(task)
+      .subscribe({
+        error: (error) => {
+          console.error(
+            'Failed to update task:',
+            error,
+          );
+        },
+      });
   }
 
+  /**
+   * =========================
+   * CLOSE FORM
+   * =========================
+   */
 
   closeForm(): void {
     this.showForm.set(false);
