@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject,  OnInit } from '@angular/core';
 
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
@@ -17,7 +17,7 @@ import { TaskService } from '../../core/services/task.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   private readonly taskService = inject(TaskService);
   readonly tasks = this.taskService.tasks;
   readonly sidebarOpen = signal(false);
@@ -51,6 +51,17 @@ export class Dashboard {
       .filter(task => task.status !== 'done')
       .slice(0, 3);
   });
+
+  ngOnInit(): void {
+    this.taskService.loadTasks().subscribe({
+      next: () => {
+        console.log('Tasks loaded:', this.tasks());
+      },
+      error: (error) => {
+        console.error('Failed to load tasks:', error);
+      },
+    });
+  }
 
   // =========================
   // Task Actions
